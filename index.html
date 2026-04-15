@@ -54,7 +54,8 @@ input[type=text]:focus{border-color:var(--accent)}
   <div id="app" class="h-full overflow-auto flex flex-col">
    <header class="sticky top-0 z-50 px-4 py-3 flex items-center justify-between" style="background:var(--bg);border-bottom:1px solid var(--border)">
     <h1 id="appTitle" class="text-lg font-bold" style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Ôn tập Vật Lý 11 HK2</h1>
-    <div class="flex items-center gap-2"><span id="scoreDisplay" class="text-sm font-semibold" style="color:var(--sub)">🏆 0</span> <button onclick="toggleDark()" class="p-2 rounded-xl" style="background:var(--card);border:1px solid var(--border)" aria-label="Toggle dark mode"> <i data-lucide="moon" style="width:18px;height:18px"></i> </button>
+    <div class="flex items-center gap-2">
+     <span id="scoreDisplay" class="text-sm font-semibold" style="color:var(--sub)">🏆 0</span> <button onclick="toggleDark()" class="p-2 rounded-xl" style="background:var(--card);border:1px solid var(--border)" aria-label="Toggle dark mode"> <i data-lucide="moon" style="width:18px;height:18px"></i> </button>
     </div>
    </header>
    <nav class="px-4 py-2 flex gap-2 overflow-x-auto" style="border-bottom:1px solid var(--border)">
@@ -263,7 +264,8 @@ function renderQuestion() {
   const q = quizQuestions[quizIndex];
   const pct = Math.round((quizIndex / quizQuestions.length) * 100);
   const correctAns = q.a.split(';')[0];
-  const questionText = quizMode === 'fill' ? q.q.replace(`(${q.a.split(';').join('|')})`, '<span style="display:inline-block;min-width:120px;border-bottom:3px solid var(--accent);margin:0 4px;text-align:center;font-weight:700" id="blankSpan">______</span>') : q.q.replace(`(${q.a.split(';').join('|')})`, '______');
+  const answerPattern = `(${q.a.split(';').join('|')})`;
+  const questionText = q.q.replace(answerPattern, '______');
 
   let body = `
     <div class="card p-5 fade-in">
@@ -605,5 +607,5 @@ window.elementSdk.init({
   ])
 });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ecb8481713fc7ca',t:'MTc3NjI2MjA1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ecba0cd5698c7ca',t:'MTc3NjI2MzIxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
