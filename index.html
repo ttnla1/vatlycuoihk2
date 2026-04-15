@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn tập Vật Lý 11 HK2</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+html,body{height:100%;margin:0;font-family:'Be Vietnam Pro',sans-serif}
+*{box-sizing:border-box}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .4s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.pop{animation:pop .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .35s ease}
+.dark-mode{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--sub:#94a3b8;--border:#334155;--accent:#38bdf8;--accent2:#818cf8;--correct:#22c55e;--wrong:#ef4444;--hover:#334155}
+.light-mode{--bg:#f0f4f8;--card:#fff;--text:#1e293b;--sub:#64748b;--border:#e2e8f0;--accent:#2563eb;--accent2:#7c3aed;--correct:#16a34a;--wrong:#dc2626;--hover:#f1f5f9}
+body{background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;transition:all .3s}
+.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:12px;padding:10px 24px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text);border-radius:12px;padding:10px 24px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.option-btn{display:block;width:100%;text-align:left;padding:14px 18px;border:2px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:15px;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.option-btn:hover:not(:disabled){border-color:var(--accent);background:var(--hover)}
+.option-btn.correct{border-color:var(--correct);background:rgba(34,197,94,.12);color:var(--correct)}
+.option-btn.wrong{border-color:var(--wrong);background:rgba(239,68,68,.1);color:var(--wrong)}
+.option-btn:disabled{cursor:default;opacity:.85}
+.progress-bar{height:8px;border-radius:99px;background:var(--border);overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s ease}
+.tab-active{background:var(--accent);color:#fff;border-color:var(--accent)}
+input[type=text]{background:var(--card);border:2px solid var(--border);color:var(--text);border-radius:12px;padding:12px 16px;font-size:15px;width:100%;outline:none;transition:border .2s}
+input[type=text]:focus{border-color:var(--accent)}
+.match-card{padding:12px 16px;border:2px solid var(--border);border-radius:12px;background:var(--card);cursor:pointer;transition:all .2s;font-size:14px;text-align:center;min-height:60px;display:flex;align-items:center;justify-content:center;word-break:break-word}
+.match-card:hover{border-color:var(--accent)}
+.match-card.selected{border-color:var(--accent);background:rgba(37,99,235,.1)}
+.match-card.matched{border-color:var(--correct);background:rgba(34,197,94,.1);pointer-events:none}
+.match-card.wrong-match{border-color:var(--wrong);background:rgba(239,68,68,.1)}
+.nav-item{padding:8px 16px;border-radius:10px;cursor:pointer;transition:all .2s;font-weight:500;font-size:14px;white-space:nowrap}
+.nav-item:hover{background:var(--hover)}
+.nav-item.active{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="light-mode h-full">
+  <div id="app" class="h-full overflow-auto flex flex-col">
+   <header class="sticky top-0 z-50 px-4 py-3 flex items-center justify-between" style="background:var(--bg);border-bottom:1px solid var(--border)">
+    <h1 id="appTitle" class="text-lg font-bold" style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Ôn tập Vật Lý 11 HK2</h1>
+    <div class="flex items-center gap-2"><span id="scoreDisplay" class="text-sm font-semibold" style="color:var(--sub)">🏆 0</span> <button onclick="toggleDark()" class="p-2 rounded-xl" style="background:var(--card);border:1px solid var(--border)" aria-label="Toggle dark mode"> <i data-lucide="moon" style="width:18px;height:18px"></i> </button>
+    </div>
+   </header>
+   <nav class="px-4 py-2 flex gap-2 overflow-x-auto" style="border-bottom:1px solid var(--border)">
+    <div class="nav-item active" data-page="quiz" onclick="showPage('quiz')">
+     📝 Luyện tập
+    </div>
+    <div class="nav-item" data-page="exam" onclick="showPage('exam')">
+     🎯 Thi thử
+    </div>
+    <div class="nav-item" data-page="match" onclick="showPage('match')">
+     🧩 Ghép cặp
+    </div>
+    <div class="nav-item" data-page="timeattack" onclick="showPage('timeattack')">
+     ⚡ Time Attack
+    </div>
+    <div class="nav-item" data-page="import" onclick="showPage('import')">
+     📂 Nhập dữ liệu
+    </div>
+   </nav>
+   <main id="content" class="flex-1 p-4 max-w-2xl mx-auto w-full"></main>
+  </div>
+  <script>
+// ===== DATA =====
+const chapters = [
+  {
+    name: "Chương 3: Điện trường",
+    questions: [
+      { q: "Điện trường là một dạng vật chất (xung quanh điện tích) và truyền tương tác (giữa các điện tích).", a: "xung quanh điện tích;giữa các điện tích" },
+      { q: "Tính chất cơ bản của điện trường: (tác dụng lực điện lên điện tích khác đặt trong nó).", a: "tác dụng lực điện lên điện tích khác đặt trong nó" },
+      { q: "Điện trường của (điện tích đứng yên) gọi là điện trường tĩnh.", a: "điện tích đứng yên" },
+      { q: "Cường độ điện trường tại một điểm trong điện trường là (đại lượng vectơ) đặc trưng cho điện trường về phương diện (tác dụng lực) tại điểm đó.", a: "đại lượng vectơ;tác dụng lực" },
+      { q: "Công thức cường độ điện trường: E = (F/q).", a: "F/q" },
+      { q: "Phương của cường độ điện trường do điện tích điểm: (nằm trên đường thẳng nối điện tích với điểm xét).", a: "nằm trên đường thẳng nối điện tích với điểm xét" },
+      { q: "Chiều của cường độ điện trường: (hướng ra xa nếu Q > 0; hướng lại gần nếu Q < 0).", a: "hướng ra xa nếu Q > 0; hướng lại gần nếu Q < 0" },
+      { q: "Độ lớn cường độ điện trường do điện tích điểm: E = (k|Q|/(εr²)).", a: "k|Q|/(εr²)" },
+      { q: "Tụ điện là một hệ gồm (hai vật dẫn đặt gần nhau và ngăn cách nhau bằng một lớp điện môi).", a: "hai vật dẫn đặt gần nhau và ngăn cách nhau bằng một lớp điện môi" },
+      { q: "Mỗi vật dẫn trong tụ điện được gọi là (một bản của tụ điện).", a: "một bản của tụ điện" },
+      { q: "Điện dung của tụ điện là đại lượng đặc trưng cho (khả năng tích điện của tụ).", a: "khả năng tích điện của tụ" },
+      { q: "Công thức điện dung: C = (Q/U).", a: "Q/U" },
+      { q: "Đơn vị điện dung là (Fara).", a: "Fara" },
+      { q: "Điện dung của tụ điện chỉ phụ thuộc vào (cấu tạo của tụ điện).", a: "cấu tạo của tụ điện" },
+      { q: "Ký hiệu (5V – 3nF) có nghĩa: 5V là (hiệu điện thế giới hạn), 3nF là (điện dung của tụ).", a: "hiệu điện thế giới hạn;điện dung của tụ" },
+      { q: "Khi nối tụ tiếp nối: U = (U₁ + U₂ + ...); Q = (Q₁ = Q₂ = ...).", a: "U₁ + U₂ + ...;Q₁ = Q₂ = ..." },
+      { q: "Khi ghép tụ song song: U = (U₁ = U₂ = ...); Q = (Q₁ + Q₂ + ...).", a: "U₁ = U₂ = ...;Q₁ + Q₂ + ..." },
+      { q: "Năng lượng của tụ là (năng lượng điện trường) bên trong tụ điện.", a: "năng lượng điện trường" },
+      { q: "Công thức năng lượng tụ: W = (1/2 CU²) = (Q²/(2C)) = (1/2 QU).", a: "1/2 CU²;Q²/(2C);1/2 QU" },
+      { q: "Ứng dụng của tụ: (Tích trữ năng lượng) trong các thiết bị điện.", a: "Tích trữ năng lượng" },
+      { q: "Tụ còn được dùng để (trữ điện tích, lọc dòng điện 1 chiều).", a: "trữ điện tích, lọc dòng điện 1 chiều" },
+    ]
+  },
+  {
+    name: "Chương 4: Dòng điện không đổi",
+    questions: [
+      { q: "Dòng điện là dòng dịch chuyển (có hướng) của các hạt mang điện.", a: "có hướng" },
+      { q: "Trong kim loại, dòng điện là dòng dịch chuyển có hướng của (các electron).", a: "các electron" },
+      { q: "Chiều dòng điện là (chiều dịch chuyển có hướng của các điện tích dương).", a: "chiều dịch chuyển có hướng của các điện tích dương" },
+      { q: "Dòng điện không đổi là dòng điện có (chiều và cường độ không đổi theo thời gian).", a: "chiều và cường độ không đổi theo thời gian" },
+      { q: "Cường độ dòng điện là đại lượng đặc trưng cho (mức độ mạnh yếu của dòng điện).", a: "mức độ mạnh yếu của dòng điện" },
+      { q: "Cường độ dòng điện được xác định bằng (điện lượng) dịch chuyển qua (tiết diện S) trong (một đơn vị thời gian).", a: "điện lượng;tiết diện S;một đơn vị thời gian" },
+      { q: "Công thức cường độ dòng điện: I = (Δq/Δt).", a: "Δq/Δt" },
+      { q: "Đơn vị cường độ dòng điện là (Ampe).", a: "Ampe" },
+      { q: "Ý nghĩa 1C: là điện lượng chuyển qua (tiết diện thẳng của dây dẫn) trong (1 giây). Công thức: 1C = (1A·1s).", a: "tiết diện thẳng của dây dẫn;1 giây;1A·1s" },
+      { q: "Các hạt mang điện có (vận tốc trung bình) không đổi gọi là (vận tốc trôi).", a: "vận tốc trung bình;vận tốc trôi", note: "Vận tốc trôi của các electron rất nhỏ (khoảng mm/s), nhưng dòng điện lan tỏa gần như tức thì." },
+      { q: "Vận tốc trôi tỉ lệ với (cường độ dòng điện) chạy trong vật dẫn.", a: "cường độ dòng điện" },
+      { q: "Công thức vận tốc trôi: v = (I/(nqS)).", a: "I/(nqS)" },
+      { q: "Trong công thức vận tốc trôi, n là (mật độ hạt điện), |q| là (độ lớn điện tích), S là (tiết diện dây dẫn).", a: "mật độ hạt điện;độ lớn điện tích;tiết diện dây dẫn" },
+      { q: "Điện trở là đại lượng đặc trưng cho (khả năng cản trở dòng điện) của vật dẫn.", a: "khả năng cản trở dòng điện" },
+      { q: "Công thức điện trở dây dẫn: R = (ρl/S).", a: "ρl/S", note: "ρ = điện trở suất (Ω·m), l = độ dài dây (m), S = tiết diện (m²)" },
+      { q: "ρ (rô) là (điện trở suất, phụ thuộc bản chất vật liệu).", a: "điện trở suất, phụ thuộc bản chất vật liệu" },
+      { q: "Điện trở phụ thuộc (nhiệt độ).", a: "nhiệt độ" },
+      { q: "PTC: (R tăng khi nhiệt độ tăng).", a: "R tăng khi nhiệt độ tăng" },
+      { q: "NTC: (R giảm khi nhiệt độ tăng).", a: "R giảm khi nhiệt độ tăng" },
+      { q: "Đèn sợi đốt là đèn (phát ra ánh sáng) khi bị (đốt nóng) nhờ vào tác dụng nhiệt của dòng điện.", a: "phát ra ánh sáng;đốt nóng" },
+      { q: "Nguồn điện là thiết bị (tạo và duy trì hiệu điện thế) nhằm (duy trì) dòng diện trong mạch.", a: "tạo và duy trì hiệu điện thế;duy trì", note: "Các loại: pin hóa học, pin mặt trời, máy phát điện, bộ tích điện." },
+      { q: "Suất điện động: E = (A/q).", a: "A/q" },
+      { q: "Khi nối nguồn tiếp: E = (E₁ + E₂ + ...); r = (r₁ + r₂ + ...).", a: "E₁ + E₂ + ...;r₁ + r₂ + ..." },
+      { q: "Khi ghép nguồn song song: E = (E₁ = E₂ = ...); r = (r/n).", a: "E₁ = E₂ = ...;r/n" },
+      { q: "Định luật Ohm cho đoạn mạch: I = (U/R).", a: "U/R" },
+      { q: "Định luật Ohm cho toàn mạch: I = (E/(R + r)).", a: "E/(R + r)" },
+      { q: "Công thức hiệu điện thế trong mạch: U = (E − Ir).", a: "E − Ir" },
+      { q: "Năng lượng tiêu thụ: A = (EIt).", a: "EIt" },
+      { q: "Nhiệt lượng tỏa ra: Q = (I²rt).", a: "I²rt" },
+      { q: "Quy đổi năng lượng điện: 1 kWh = (3,6·10⁶ J).", a: "3,6·10⁶ J" },
+      { q: "Công suất: P = (A/t) = (UI).", a: "A/t;UI" },
+      { q: "Hiệu suất: H = (U/E).", a: "U/E" },
+      { q: "Ký hiệu bóng đèn (3V – 6W) có nghĩa: 3V là (hiệu điện thế định mức), 6W là (công suất định mức).", a: "hiệu điện thế định mức;công suất định mức" },
+      { q: "Điện trở của bóng đèn (3V – 6W): R = (U²/P) = (1,5Ω).", a: "U²/P;1,5Ω" },
+    ]
+  }
+];
+
+// Flatten all questions
+let allQuestions = [];
+chapters.forEach((ch, ci) => {
+  ch.questions.forEach((q, qi) => {
+    allQuestions.push({ ...q, chapter: ch.name, id: `${ci}-${qi}` });
+  });
+});
+
+// ===== STATE =====
+let currentPage = 'quiz';
+let quizMode = 'mc'; // mc | fill
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+let examMode = false;
+let examAnswers = [];
+let totalScore = parseInt(localStorage.getItem('studyhub_score') || '0');
+
+// Audio context for sounds
+let audioCtx;
+function playSound(type) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    gain.gain.value = 0.1;
+    if (type === 'correct') { osc.frequency.value = 880; osc.type = 'sine'; }
+    else { osc.frequency.value = 220; osc.type = 'square'; }
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.15);
+  } catch(e) {}
+}
+
+// ===== DARK MODE =====
+let isDark = localStorage.getItem('studyhub_dark') === '1';
+function applyTheme() {
+  document.body.className = isDark ? 'dark-mode h-full' : 'light-mode h-full';
+}
+function toggleDark() {
+  isDark = !isDark;
+  localStorage.setItem('studyhub_dark', isDark ? '1' : '0');
+  applyTheme();
+}
+applyTheme();
+
+// ===== UTILS =====
+function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function saveScore() { localStorage.setItem('studyhub_score', totalScore); document.getElementById('scoreDisplay').textContent = '🏆 ' + totalScore; }
+function generateWrongAnswers(correct, allAs) {
+  let wrongs = allAs.filter(a => a.toLowerCase() !== correct.toLowerCase()).filter((v, i, a) => a.indexOf(v) === i);
+  wrongs = shuffle(wrongs).slice(0, 3);
+  while (wrongs.length < 3) wrongs.push(correct + ' (sai)');
+  return wrongs;
+}
+const allAnswers = allQuestions.map(q => q.a.split(';')[0]);
+
+// ===== NAVIGATION =====
+function showPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.page === page);
+  });
+  const c = document.getElementById('content');
+  if (page === 'quiz') renderQuizSetup(c, false);
+  else if (page === 'exam') renderQuizSetup(c, true);
+  else if (page === 'match') renderMatchGame(c);
+  else if (page === 'timeattack') renderTimeAttack(c);
+  else if (page === 'import') renderImport(c);
+}
+
+// ===== QUIZ / EXAM =====
+function renderQuizSetup(c, isExam) {
+  examMode = isExam;
+  examAnswers = [];
+  quizMode = 'mc'; // Reset về trắc nghiệm mỗi lần vào
+  c.innerHTML = `
+    <div class="card p-6 fade-in">
+      <h2 class="text-xl font-bold mb-1">${isExam ? '🎯 Chế độ Thi thử' : '📝 Chế độ Luyện tập'}</h2>
+      <p class="mb-4" style="color:var(--sub);font-size:14px">${isExam ? 'Đáp án hiển thị ở cuối bài' : 'Xem đáp án ngay sau mỗi câu'}</p>
+      <div class="mb-4">
+        <label class="block text-sm font-semibold mb-2">Chọn chương:</label>
+        <select id="chapterSelect" style="width:100%;padding:10px 14px;border-radius:12px;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:14px">
+          <option value="all">Tất cả (${allQuestions.length} câu)</option>
+          ${chapters.map((ch, i) => `<option value="${i}">${ch.name} (${ch.questions.length} câu)</option>`).join('')}
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-semibold mb-2">Dạng bài:</label>
+        <div class="flex gap-2">
+          <button class="btn-outline tab-btn tab-active" data-mode="mc" onclick="quizMode='mc';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('tab-active'));this.classList.add('tab-active')">Trắc nghiệm</button>
+          <button class="btn-outline tab-btn" data-mode="fill" onclick="quizMode='fill';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('tab-active'));this.classList.add('tab-active')">Điền khuyết</button>
+        </div>
+      </div>
+      <button class="btn-primary w-full text-base" onclick="startQuiz()">Bắt đầu →</button>
+    </div>`;
+}
+
+function startQuiz() {
+  const sel = document.getElementById('chapterSelect').value;
+  quizQuestions = sel === 'all' ? shuffle(allQuestions) : shuffle(allQuestions.filter((q, i) => {
+    const ci = parseInt(q.id.split('-')[0]);
+    return ci === parseInt(sel);
+  }));
+  if (quizQuestions.length === 0) { quizQuestions = shuffle(allQuestions); }
+  quizIndex = 0; quizScore = 0; quizAnswered = false; examAnswers = [];
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const c = document.getElementById('content');
+  if (quizIndex >= quizQuestions.length) { renderResults(c); return; }
+  const q = quizQuestions[quizIndex];
+  const pct = Math.round((quizIndex / quizQuestions.length) * 100);
+  const correctAns = q.a.split(';')[0];
+  const questionText = quizMode === 'fill' ? q.q.replace(`(${q.a.split(';').join('|')})`, '<span style="display:inline-block;min-width:120px;border-bottom:3px solid var(--accent);margin:0 4px;text-align:center;font-weight:700" id="blankSpan">______</span>') : q.q.replace(`(${q.a.split(';').join('|')})`, '______');
+
+  let body = `
+    <div class="card p-5 fade-in">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-semibold" style="color:var(--sub)">${q.chapter}</span>
+        <span class="text-xs font-semibold" style="color:var(--sub)">Câu ${quizIndex+1}/${quizQuestions.length}</span>
+      </div>
+      <div class="progress-bar mb-4"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <p class="text-base font-medium mb-4 leading-relaxed">${questionText}</p>`;
+
+  if (quizMode === 'mc') {
+    const wrongs = generateWrongAnswers(correctAns, allAnswers);
+    const options = shuffle([correctAns, ...wrongs]);
+    const labels = ['A', 'B', 'C', 'D'];
+    body += `<div id="optionsArea">`;
+    options.forEach((opt, i) => {
+      body += `<button class="option-btn" onclick="selectOption(this,'${btoa(encodeURIComponent(correctAns))}','${btoa(encodeURIComponent(opt))}')">${labels[i]}. ${opt}</button>`;
+    });
+    body += `</div>`;
+  } else {
+    body += `<div class="flex gap-2 mb-2"><input type="text" id="fillInput" placeholder="Nhập đáp án..." autocomplete="off"><button class="btn-primary" onclick="checkFill('${btoa(encodeURIComponent(correctAns))}')">Kiểm tra</button></div><div id="fillResult"></div>`;
+  }
+
+  if (q.note) {
+    body += `<details class="mt-4" style="border-top:1px solid var(--border);padding-top:12px"><summary class="text-sm font-semibold cursor-pointer" style="color:var(--accent)">📌 Ghi chú / Mở rộng</summary><p class="text-sm mt-2" style="color:var(--sub)">${q.note}</p></details>`;
+  }
+
+  body += `<div id="nextArea" class="mt-4" style="display:none"><button class="btn-primary w-full" onclick="nextQuestion()">Câu tiếp theo →</button></div>`;
+  body += `</div>`;
+  c.innerHTML = body;
+  if (quizMode === 'fill') document.getElementById('fillInput').focus();
+}
+
+function selectOption(btn, correctB64, selectedB64) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const correct = decodeURIComponent(atob(correctB64));
+  const selected = decodeURIComponent(atob(selectedB64));
+  const isCorrect = selected === correct;
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent.substring(3) === correct) b.classList.add('correct');
+  });
+  if (isCorrect) {
+    btn.classList.add('correct', 'pop');
+    quizScore++; if (!examMode) { totalScore++; saveScore(); }
+    playSound('correct');
+  } else {
+    btn.classList.add('wrong', 'shake');
+    playSound('wrong');
+  }
+  if (examMode) examAnswers.push({ q: quizQuestions[quizIndex], selected, correct, isCorrect });
+  document.getElementById('nextArea').style.display = 'block';
+}
+
+function checkFill(correctB64) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const correct = decodeURIComponent(atob(correctB64));
+  const input = document.getElementById('fillInput');
+  const val = input.value.trim();
+  const res = document.getElementById('fillResult');
+  const isCorrect = val.toLowerCase() === correct.toLowerCase();
+  if (isCorrect) {
+    res.innerHTML = `<div class="pop" style="color:var(--correct);font-weight:600">✅ Chính xác!</div>`;
+    quizScore++; if (!examMode) { totalScore++; saveScore(); }
+    playSound('correct');
+    input.style.borderColor = 'var(--correct)';
+    const blank = document.getElementById('blankSpan');
+    if (blank) { blank.textContent = correct; blank.style.color = 'var(--correct)'; }
+  } else {
+    res.innerHTML = `<div class="shake" style="color:var(--wrong);font-weight:600">❌ Sai! Đáp án: <strong>${correct}</strong></div>`;
+    playSound('wrong');
+    input.style.borderColor = 'var(--wrong)';
+    const blank = document.getElementById('blankSpan');
+    if (blank) { blank.textContent = correct; blank.style.color = 'var(--wrong)'; }
+  }
+  if (examMode) examAnswers.push({ q: quizQuestions[quizIndex], selected: val, correct, isCorrect });
+  input.disabled = true;
+  document.getElementById('nextArea').style.display = 'block';
+}
+
+function nextQuestion() { quizIndex++; quizAnswered = false; renderQuestion(); }
+
+function renderResults(c) {
+  const pct = Math.round((quizScore / quizQuestions.length) * 100);
+  let emoji = pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '💪';
+  let html = `<div class="card p-6 fade-in text-center">
+    <div class="text-5xl mb-3">${emoji}</div>
+    <h2 class="text-2xl font-bold mb-2">Kết quả</h2>
+    <p class="text-3xl font-extrabold mb-1" style="color:var(--accent)">${quizScore}/${quizQuestions.length}</p>
+    <p class="mb-4" style="color:var(--sub)">${pct}% chính xác</p>
+    <div class="progress-bar mb-6"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+
+  if (examMode && examAnswers.length) {
+    html += `<div class="text-left mt-4"><h3 class="font-bold mb-3">Chi tiết:</h3>`;
+    examAnswers.forEach((ea, i) => {
+      html += `<div class="mb-3 p-3 rounded-xl" style="background:${ea.isCorrect ? 'rgba(34,197,94,.08)' : 'rgba(239,68,68,.06)'};border:1px solid ${ea.isCorrect ? 'var(--correct)' : 'var(--wrong)'}">
+        <p class="text-sm font-medium mb-1">${i+1}. ${ea.q.q.replace(/\([^)]+\)/g, '______').substring(0,80)}</p>
+        <p class="text-xs">Đáp án của bạn: <strong style="color:${ea.isCorrect?'var(--correct)':'var(--wrong)'}">${ea.selected || '(bỏ trống)'}</strong> | Đúng: <strong style="color:var(--correct)">${ea.correct}</strong></p>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (examMode) { totalScore += quizScore; saveScore(); }
+  html += `<button class="btn-primary w-full mt-4" onclick="showPage('${examMode?'exam':'quiz'}')">Làm lại</button></div>`;
+  c.innerHTML = html;
+}
+
+// ===== MATCH GAME =====
+let matchPairs = [], matchSelected = null, matchMatched = 0;
+function renderMatchGame(c) {
+  const qs = shuffle(allQuestions).slice(0, 6);
+  matchPairs = qs.map((q, i) => ({ id: i, q: q.q.replace(/\([^)]+\)/g, '______').substring(0, 50) + (q.q.length > 50 ? '...' : ''), a: q.a.split(';')[0] }));
+  matchSelected = null; matchMatched = 0;
+  const leftCards = shuffle([...matchPairs]);
+  const rightCards = shuffle([...matchPairs]);
+
+  c.innerHTML = `<div class="card p-5 fade-in">
+    <h2 class="text-lg font-bold mb-1">🧩 Ghép cặp câu hỏi – đáp án</h2>
+    <p class="text-sm mb-4" style="color:var(--sub)">Chọn câu hỏi bên trái, rồi chọn đáp án bên phải</p>
+    <div id="matchStatus" class="text-sm font-semibold mb-3" style="color:var(--accent)">0/${matchPairs.length} cặp</div>
+    <div class="grid grid-cols-2 gap-3">
+      <div id="matchLeft">${leftCards.map(p => `<div class="match-card mb-2" data-type="q" data-id="${p.id}" onclick="matchClick(this)">${p.q}</div>`).join('')}</div>
+      <div id="matchRight">${rightCards.map(p => `<div class="match-card mb-2" data-type="a" data-id="${p.id}" onclick="matchClick(this)">${p.a}</div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+function matchClick(el) {
+  if (el.classList.contains('matched')) return;
+  const type = el.dataset.type;
+  const id = parseInt(el.dataset.id);
+
+  if (!matchSelected) {
+    matchSelected = { el, type, id };
+    el.classList.add('selected');
+    return;
+  }
+
+  if (matchSelected.type === type) {
+    matchSelected.el.classList.remove('selected');
+    matchSelected = { el, type, id };
+    el.classList.add('selected');
+    return;
+  }
+
+  if (matchSelected.id === id) {
+    matchSelected.el.classList.add('matched');
+    el.classList.add('matched');
+    matchSelected.el.classList.remove('selected');
+    matchMatched++;
+    playSound('correct');
+    totalScore++; saveScore();
+    document.getElementById('matchStatus').textContent = `${matchMatched}/${matchPairs.length} cặp`;
+    if (matchMatched === matchPairs.length) {
+      setTimeout(() => {
+        document.getElementById('matchStatus').innerHTML = `<span class="text-lg">🎉 Hoàn thành! +${matchPairs.length} điểm</span>`;
+      }, 300);
+    }
+  } else {
+    el.classList.add('wrong-match');
+    matchSelected.el.classList.add('wrong-match');
+    const prev = matchSelected.el;
+    playSound('wrong');
+    setTimeout(() => { el.classList.remove('wrong-match'); prev.classList.remove('wrong-match'); prev.classList.remove('selected'); }, 600);
+  }
+  matchSelected = null;
+}
+
+// ===== TIME ATTACK =====
+let taTimer, taTime, taScore2, taIndex, taQs, taAnswered2;
+function renderTimeAttack(c) {
+  c.innerHTML = `<div class="card p-6 fade-in text-center">
+    <h2 class="text-xl font-bold mb-2">⚡ Time Attack</h2>
+    <p class="mb-4" style="color:var(--sub)">Trả lời nhiều câu nhất trong 60 giây!</p>
+    <button class="btn-primary text-lg px-8" onclick="startTA()">Bắt đầu!</button>
+  </div>`;
+}
+
+function startTA() {
+  taTime = 60; taScore2 = 0; taIndex = 0; taAnswered2 = false;
+  taQs = shuffle(allQuestions);
+  renderTAQuestion();
+  clearInterval(taTimer);
+  taTimer = setInterval(() => {
+    taTime--;
+    const el = document.getElementById('taTimerDisplay');
+    if (el) el.textContent = taTime + 's';
+    if (taTime <= 0) { clearInterval(taTimer); renderTAResults(); }
+  }, 1000);
+}
+
+function renderTAQuestion() {
+  if (taIndex >= taQs.length) taIndex = 0;
+  const q = taQs[taIndex];
+  const c = document.getElementById('content');
+  const correctAns = q.a.split(';')[0];
+  const wrongs = generateWrongAnswers(correctAns, allAnswers);
+  const options = shuffle([correctAns, ...wrongs]);
+  const labels = ['A','B','C','D'];
+  taAnswered2 = false;
+
+  c.innerHTML = `<div class="card p-5 fade-in">
+    <div class="flex justify-between items-center mb-3">
+      <span id="taTimerDisplay" class="text-2xl font-extrabold" style="color:${taTime<=10?'var(--wrong)':'var(--accent)'}">${taTime}s</span>
+      <span class="font-bold" style="color:var(--correct)">✅ ${taScore2}</span>
+    </div>
+    <div class="progress-bar mb-4"><div class="progress-fill" style="width:${(taTime/60)*100}%"></div></div>
+    <p class="text-base font-medium mb-4">${q.q.replace(/\([^)]+\)/g, '______')}</p>
+    <div id="taOptions">${options.map((opt, i) => `<button class="option-btn" onclick="taSelect(this,'${btoa(encodeURIComponent(correctAns))}','${btoa(encodeURIComponent(opt))}')">${labels[i]}. ${opt}</button>`).join('')}</div>
+  </div>`;
+}
+
+function taSelect(btn, cB64, sB64) {
+  if (taAnswered2) return;
+  taAnswered2 = true;
+  const correct = decodeURIComponent(atob(cB64));
+  const selected = decodeURIComponent(atob(sB64));
+  if (selected === correct) {
+    btn.classList.add('correct', 'pop');
+    taScore2++;
+    playSound('correct');
+  } else {
+    btn.classList.add('wrong', 'shake');
+    playSound('wrong');
+    document.querySelectorAll('#taOptions .option-btn').forEach(b => { if (b.textContent.substring(3) === correct) b.classList.add('correct'); });
+  }
+  document.querySelectorAll('#taOptions .option-btn').forEach(b => b.disabled = true);
+  setTimeout(() => { taIndex++; renderTAQuestion(); }, 700);
+}
+
+function renderTAResults() {
+  totalScore += taScore2; saveScore();
+  const c = document.getElementById('content');
+  c.innerHTML = `<div class="card p-6 fade-in text-center">
+    <div class="text-5xl mb-3">⚡</div>
+    <h2 class="text-2xl font-bold mb-2">Hết giờ!</h2>
+    <p class="text-4xl font-extrabold mb-2" style="color:var(--accent)">${taScore2}</p>
+    <p class="mb-4" style="color:var(--sub)">câu đúng trong 60 giây</p>
+    <button class="btn-primary w-full" onclick="renderTimeAttack(document.getElementById('content'))">Chơi lại</button>
+  </div>`;
+}
+
+// ===== IMPORT =====
+function renderImport(c) {
+  c.innerHTML = `<div class="card p-6 fade-in">
+    <h2 class="text-lg font-bold mb-2">📂 Nhập câu hỏi từ file</h2>
+    <p class="text-sm mb-4" style="color:var(--sub)">Mỗi câu một dòng, đáp án nằm trong dấu ngoặc ( )</p>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold mb-2">Tên chương:</label>
+      <input type="text" id="importChName" placeholder="Ví dụ: Chương 5">
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold mb-2">Nhập câu hỏi:</label>
+      <textarea id="importText" rows="8" style="width:100%;padding:12px;border:2px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:14px;resize:vertical;font-family:monospace" placeholder="Mỗi câu một dòng, đáp án trong ngoặc ()&#10;Ví dụ: Lực là nguyên nhân gây ra (gia tốc)."></textarea>
+    </div>
+    <button class="btn-primary w-full" onclick="processImport()">Nhập câu hỏi</button>
+    <div id="importResult" class="mt-3"></div>
+  </div>`;
+}
+
+function processImport() {
+  const text = document.getElementById('importText').value.trim();
+  const chName = document.getElementById('importChName').value.trim() || 'Chương nhập thêm';
+  if (!text) { document.getElementById('importResult').innerHTML = '<p style="color:var(--wrong)">Chưa có nội dung!</p>'; return; }
+
+  const lines = text.split('\n').filter(l => l.trim());
+  const parsed = [];
+  const regex = /\(([^)]+)\)/;
+
+  lines.forEach(line => {
+    const match = line.match(regex);
+    if (match) {
+      parsed.push({ q: line.trim(), a: match[1].trim() });
+    }
+  });
+
+  if (parsed.length === 0) {
+    document.getElementById('importResult').innerHTML = '<p style="color:var(--wrong)">Không tìm thấy câu hỏi hợp lệ. Đảm bảo đáp án nằm trong ().</p>';
+    return;
+  }
+
+  const newChapter = { name: chName, questions: parsed };
+  chapters.push(newChapter);
+  // Rebuild allQuestions
+  allQuestions = [];
+  chapters.forEach((ch, ci) => {
+    ch.questions.forEach((q, qi) => {
+      allQuestions.push({ ...q, chapter: ch.name, id: `${ci}-${qi}` });
+    });
+  });
+
+  document.getElementById('importResult').innerHTML = `<p style="color:var(--correct);font-weight:600">✅ Đã nhập ${parsed.length} câu vào "${chName}"!</p>`;
+}
+
+// ===== INIT =====
+saveScore();
+showPage('quiz');
+lucide.createIcons();
+
+// ===== ELEMENT SDK =====
+const defaultConfig = {
+  app_title: 'Ôn tập Vật Lý 11 HK2',
+  background_color: '#f0f4f8',
+  surface_color: '#ffffff',
+  text_color: '#1e293b',
+  accent_color: '#2563eb',
+  accent2_color: '#7c3aed',
+  font_family: 'Be Vietnam Pro',
+  font_size: 16
+};
+
+function applyConfig(config) {
+  const title = config.app_title || defaultConfig.app_title;
+  document.getElementById('appTitle').textContent = title;
+  document.title = title;
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => { applyConfig(config); },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.accent_color || defaultConfig.accent_color, set: v => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+      { get: () => config.accent2_color || defaultConfig.accent2_color, set: v => { config.accent2_color = v; window.elementSdk.setConfig({ accent2_color: v }); } },
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['app_title', config.app_title || defaultConfig.app_title],
+  ])
+});
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ecb8481713fc7ca',t:'MTc3NjI2MjA1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
